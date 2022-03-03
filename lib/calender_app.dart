@@ -35,7 +35,8 @@ class _CalenderPageState extends State<CalenderPage> {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('${_nowDate!.month.toString()}月'),
+              Text(
+                  '${_nowDate!.year.toString()}年${_nowDate!.month.toString()}月'),
               _createCalender(),
               Row(
                 children: [
@@ -62,7 +63,7 @@ class _CalenderPageState extends State<CalenderPage> {
 
   void prevMonth() {
     DateTime prevMonth = DateTime(_nowDate!.year, _nowDate!.month - 1);
-    int nextMonthLastDay = DateTime(prevMonth.year, prevMonth.month - 1, 0).day;
+    int nextMonthLastDay = DateTime(prevMonth.year, prevMonth.month + 1, 0).day;
     setState(() {
       _nowDate = prevMonth;
       _lastDay = nextMonthLastDay;
