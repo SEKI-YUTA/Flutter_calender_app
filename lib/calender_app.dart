@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CalenderPage extends StatefulWidget {
   const CalenderPage({Key? key}) : super(key: key);
@@ -8,14 +9,17 @@ class CalenderPage extends StatefulWidget {
 }
 
 class _CalenderPageState extends State<CalenderPage> {
+  DateFormat _formatter = DateFormat('yyyy-MM-dd');
   DateTime? _nowDate;
   int? _lastDay;
+  String? _nowDay;
   List<String> weekDays = ["sun", 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   @override
   void initState() {
     super.initState();
     _nowDate = DateTime.now();
     _lastDay = DateTime(_nowDate!.year, _nowDate!.month + 1, 0).day;
+    _nowDay = DateTime.now().day.toString();
     print('lastday: ${_lastDay}');
     print(_nowDate!.weekday);
     setState(() {
@@ -35,8 +39,17 @@ class _CalenderPageState extends State<CalenderPage> {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Text((_formatter.format(_nowDate ?? DateTime.now()) ==
+              //         _formatter.format(DateTime.now()))
+              //     .toString()),
               Text(
-                  '${_nowDate!.year.toString()}年${_nowDate!.month.toString()}月'),
+                '${_nowDate!.year.toString()}年${_nowDate!.month.toString()}月',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
               _createCalender(),
               Row(
                 children: [
@@ -129,8 +142,9 @@ class _CalenderPageState extends State<CalenderPage> {
 
   Widget _createCalenderHeader(List<String> weekDays) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(weekDays.length,
-          (index) => _createDay(day: weekDays[index], bgColor: Colors.amber)),
+          (index) => _createDay(day: weekDays[index], bgColor: Colors.grey)),
     );
   }
 
@@ -138,6 +152,7 @@ class _CalenderPageState extends State<CalenderPage> {
     List<String> days,
   ) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(days.length, (index) {
         if (days[index] == "0") {
           return _createDay(day: "");
@@ -152,9 +167,14 @@ class _CalenderPageState extends State<CalenderPage> {
 
   Widget _createDay({required String day, Color? bgColor}) {
     return Container(
-      width: 30,
+      width: 40,
       height: 30,
-      decoration: BoxDecoration(color: bgColor ?? Colors.orangeAccent),
+      decoration: BoxDecoration(
+          color: day == _nowDay &&
+                  _formatter.format(_nowDate ?? DateTime.now()) ==
+                      _formatter.format(DateTime.now())
+              ? Colors.red.withOpacity(0.5)
+              : bgColor ?? Colors.blue[100]),
       child: Center(child: Text(day)),
     );
   }
